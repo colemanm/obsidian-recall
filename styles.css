@@ -1,0 +1,143 @@
+.recall-status {
+	padding: 16px;
+	color: var(--text-muted);
+	font-size: var(--font-ui-small);
+	text-align: center;
+}
+
+.recall-error {
+	color: var(--text-error);
+}
+
+.recall-toolbar {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 6px 8px;
+}
+
+.recall-count {
+	font-size: var(--font-ui-smaller);
+	color: var(--text-muted);
+}
+
+.recall-refresh-btn {
+	font-size: var(--font-ui-smaller);
+	padding: 2px 10px;
+	border-radius: 4px;
+	background: var(--background-modifier-hover);
+	color: var(--text-muted);
+	border: 1px solid var(--background-modifier-border);
+	cursor: pointer;
+}
+
+.recall-refresh-btn:hover {
+	color: var(--text-normal);
+	background: var(--background-modifier-border);
+}
+
+.recall-results {
+	padding: 8px;
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+}
+
+.recall-card {
+	background: var(--background-secondary);
+	border: 1px solid var(--background-modifier-border);
+	border-radius: 8px;
+	padding: 12px;
+}
+
+.recall-card-header {
+	margin-bottom: 6px;
+	line-height: 1.4;
+}
+
+.recall-card-title {
+	font-weight: 600;
+	font-size: var(--font-ui-small);
+	color: var(--text-normal);
+}
+
+.recall-card-author {
+	font-size: var(--font-ui-smaller);
+	color: var(--text-muted);
+}
+
+.recall-card-text {
+	margin: 8px 0;
+	padding-left: 10px;
+	border-left: 3px solid var(--interactive-accent);
+	font-size: var(--font-ui-small);
+	color: var(--text-normal);
+	line-height: 1.5;
+}
+
+.recall-card-note {
+	font-size: var(--font-ui-smaller);
+	color: var(--text-muted);
+	font-style: italic;
+	margin-bottom: 6px;
+}
+
+.recall-card-summary {
+	font-size: var(--font-ui-small);
+	color: var(--text-normal);
+	line-height: 1.4;
+	margin: 6px 0;
+}
+
+.recall-card-tags {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 4px;
+	margin-bottom: 6px;
+}
+
+.recall-tag {
+	font-size: var(--font-ui-smaller);
+	color: var(--text-accent);
+	background: var(--background-modifier-hover);
+	border-radius: 4px;
+	padding: 1px 6px;
+}
+
+.recall-card-meta {
+	display: flex;
+	gap: 8px;
+	margin-bottom: 6px;
+}
+
+.recall-meta-item {
+	font-size: var(--font-ui-smaller);
+	color: var(--text-muted);
+}
+
+.recall-card-actions {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	margin-top: 6px;
+}
+
+.recall-link {
+	font-size: var(--font-ui-smaller);
+	color: var(--text-accent);
+	cursor: pointer;
+}
+
+.recall-insert-btn {
+	font-size: var(--font-ui-smaller);
+	padding: 2px 8px;
+	border-radius: 4px;
+	background: var(--interactive-accent);
+	color: var(--text-on-accent);
+	border: none;
+	cursor: pointer;
+}
+
+.recall-insert-btn:hover {
+	background: var(--interactive-accent-hover);
+}
