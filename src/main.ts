@@ -27,7 +27,7 @@ export default class RecallPlugin extends Plugin {
 		this.addCommand({
 			id: "search-readwise-current-note",
 			name: "Search Readwise for current note",
-			callback: () => this.triggerSearch(),
+			callback: () => this.activateView(),
 		});
 
 		this.addCommand({
@@ -62,6 +62,7 @@ export default class RecallPlugin extends Plugin {
 
 		this.registerEvent(
 			this.app.workspace.on("active-leaf-change", () => {
+				if (!this.isRecallViewVisible()) return;
 				const file = this.app.workspace.getActiveFile();
 				const path = file?.path ?? null;
 				if (path && path !== this.currentFilePath) {
@@ -103,7 +104,7 @@ export default class RecallPlugin extends Plugin {
 		}
 
 		if (leaf) {
-			workspace.revealLeaf(leaf);
+			await workspace.revealLeaf(leaf);
 		}
 
 		if (!skipSearch) {
@@ -112,6 +113,7 @@ export default class RecallPlugin extends Plugin {
 	}
 
 	private async triggerSearch(): Promise<void> {
+		if (!this.isRecallViewVisible()) return;
 		const view = this.getView();
 		if (!view) return;
 
@@ -228,8 +230,20 @@ export default class RecallPlugin extends Plugin {
 			if (!view.onRefresh) {
 				view.onRefresh = () => this.triggerSearch();
 			}
-return view;
+			return view;
 		}
 		return null;
+	}
+
+	/**
+	 * Returns true if the Recall panel exists and is currently visible
+	 * (not deferred/hidden because the user switched to another tab).
+	 */
+	private isRecallViewVisible(): boolean {
+		const leaves = this.app.workspace.getLeavesOfType(VIEW_TYPE_RECALL);
+		if (leaves.length === 0) return false;
+		const leaf = leaves[0];
+		// isDeferred (Obsidian 1.7.2+): true when tab is in background
+		return (leaf as { isDeferred?: boolean }).isDeferred !== true;
 	}
 }
