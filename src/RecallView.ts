@@ -96,11 +96,14 @@ export class RecallView extends ItemView {
 	}
 
 	private addToolbar(count: number, searchLabel?: string, hasHistory?: boolean): void {
-		const bar = this.contentEl_.createEl("div", { cls: "recall-toolbar" });
+		const wrapper = this.contentEl_.createEl("div", { cls: "recall-toolbar" });
+
+		const row = wrapper.createEl("div", { cls: "recall-toolbar-row" });
+
+		const buttons = row.createEl("div", { cls: "recall-toolbar-buttons" });
 
 		if (hasHistory) {
-			const backBtn = bar.createEl("button", {
-				cls: "recall-back-btn",
+			const backBtn = buttons.createEl("button", {
 				text: "\u2190 Back",
 			});
 			backBtn.addEventListener("click", () => {
@@ -108,23 +111,24 @@ export class RecallView extends ItemView {
 			});
 		}
 
-		const btn = bar.createEl("button", {
-			cls: "recall-refresh-btn",
+		const btn = buttons.createEl("button", {
 			text: "Refresh",
 		});
 		btn.addEventListener("click", () => {
 			if (this.onRefresh) this.onRefresh();
 		});
+
+		row.createEl("span", {
+			cls: "recall-count",
+			text: `${count} result${count !== 1 ? "s" : ""}`,
+		});
+
 		if (searchLabel) {
-			bar.createEl("span", {
+			wrapper.createEl("div", {
 				cls: "recall-search-label",
 				text: searchLabel,
 			});
 		}
-		bar.createEl("span", {
-			cls: "recall-count",
-			text: `${count} result${count !== 1 ? "s" : ""}`,
-		});
 	}
 
 	private renderHighlightCard(container: HTMLElement, h: ReadwiseHighlight): void {
@@ -151,6 +155,21 @@ export class RecallView extends ItemView {
 
 		const actions = card.createEl("div", { cls: "recall-card-actions" });
 
+		const insertBtn = actions.createEl("button", {
+			cls: "mod-cta",
+			text: "Insert",
+		});
+		insertBtn.addEventListener("click", () => {
+			this.insertHighlight(h);
+		});
+
+		const deeperBtn = actions.createEl("button", {
+			text: "Go Deeper \u2192",
+		});
+		deeperBtn.addEventListener("click", () => {
+			if (this.onGoDeeper) this.onGoDeeper(h.text);
+		});
+
 		if (h.url) {
 			const link = actions.createEl("a", { cls: "recall-link", text: "Open in Readwise" });
 			link.href = h.url;
@@ -159,22 +178,6 @@ export class RecallView extends ItemView {
 				window.open(h.url);
 			});
 		}
-
-		const insertBtn = actions.createEl("button", {
-			cls: "recall-insert-btn",
-			text: "Insert",
-		});
-		insertBtn.addEventListener("click", () => {
-			this.insertHighlight(h);
-		});
-
-		const deeperBtn = actions.createEl("button", {
-			cls: "recall-deeper-btn",
-			text: "Go Deeper",
-		});
-		deeperBtn.addEventListener("click", () => {
-			if (this.onGoDeeper) this.onGoDeeper(h.text);
-		});
 	}
 
 	private renderDocumentCard(container: HTMLElement, d: ReaderDocument): void {
