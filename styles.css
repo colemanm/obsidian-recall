@@ -141,3 +141,33 @@
 .recall-insert-btn:hover {
 	background: var(--interactive-accent-hover);
 }
+
+.recall-deeper-btn {
+	font-size: var(--font-ui-smaller);
+	padding: 2px 8px;
+	border-radius: 4px;
+	background: var(--background-secondary);
+	color: var(--text-muted);
+	border: 1px solid var(--background-modifier-border);
+	cursor: pointer;
+}
+
+.recall-deeper-btn:hover {
+	color: var(--text-normal);
+	background: var(--background-modifier-hover);
+}
+
+.recall-back-btn {
+	font-size: var(--font-ui-smaller);
+	padding: 2px 10px;
+	border-radius: 4px;
+	background: var(--background-modifier-hover);
+	color: var(--text-muted);
+	border: 1px solid var(--background-modifier-border);
+	cursor: pointer;
+}
+
+.recall-back-btn:hover {
+	color: var(--text-normal);
+	background: var(--background-modifier-border);
+}

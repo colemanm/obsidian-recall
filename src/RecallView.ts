@@ -7,6 +7,8 @@ export class RecallView extends ItemView {
 	private contentEl_: HTMLElement;
 	private lastMarkdownLeaf: WorkspaceLeaf | null = null;
 	onRefresh: (() => void) | null = null;
+	onGoDeeper: ((highlightText: string) => void) | null = null;
+	onBack: (() => void) | null = null;
 
 	constructor(leaf: WorkspaceLeaf) {
 		super(leaf);
@@ -69,18 +71,18 @@ export class RecallView extends ItemView {
 		el.createEl("p", { text: message });
 	}
 
-	renderEmpty(searchLabel?: string): void {
+	renderEmpty(searchLabel?: string, hasHistory?: boolean): void {
 		this.contentEl_.empty();
-		this.addToolbar(0, searchLabel);
+		this.addToolbar(0, searchLabel, hasHistory);
 		this.contentEl_.createEl("div", {
 			cls: "recall-status",
 			text: "No related highlights found.",
 		});
 	}
 
-	renderResults(results: SearchResult[], searchLabel?: string): void {
+	renderResults(results: SearchResult[], searchLabel?: string, hasHistory?: boolean): void {
 		this.contentEl_.empty();
-		this.addToolbar(results.length, searchLabel);
+		this.addToolbar(results.length, searchLabel, hasHistory);
 
 		const container = this.contentEl_.createEl("div", { cls: "recall-results" });
 
@@ -93,8 +95,19 @@ export class RecallView extends ItemView {
 		}
 	}
 
-private addToolbar(count: number, searchLabel?: string): void {
+	private addToolbar(count: number, searchLabel?: string, hasHistory?: boolean): void {
 		const bar = this.contentEl_.createEl("div", { cls: "recall-toolbar" });
+
+		if (hasHistory) {
+			const backBtn = bar.createEl("button", {
+				cls: "recall-back-btn",
+				text: "\u2190 Back",
+			});
+			backBtn.addEventListener("click", () => {
+				if (this.onBack) this.onBack();
+			});
+		}
+
 		const btn = bar.createEl("button", {
 			cls: "recall-refresh-btn",
 			text: "Refresh",
@@ -102,7 +115,7 @@ private addToolbar(count: number, searchLabel?: string): void {
 		btn.addEventListener("click", () => {
 			if (this.onRefresh) this.onRefresh();
 		});
-if (searchLabel) {
+		if (searchLabel) {
 			bar.createEl("span", {
 				cls: "recall-search-label",
 				text: searchLabel,
@@ -153,6 +166,14 @@ if (searchLabel) {
 		});
 		insertBtn.addEventListener("click", () => {
 			this.insertHighlight(h);
+		});
+
+		const deeperBtn = actions.createEl("button", {
+			cls: "recall-deeper-btn",
+			text: "Go Deeper",
+		});
+		deeperBtn.addEventListener("click", () => {
+			if (this.onGoDeeper) this.onGoDeeper(h.text);
 		});
 	}
 

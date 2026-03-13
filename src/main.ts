@@ -1,5 +1,5 @@
 import { Menu, Plugin, TFile, WorkspaceLeaf } from "obsidian";
-import { RecallSettings, DEFAULT_SETTINGS, SearchResult } from "./types";
+import { RecallSettings, DEFAULT_SETTINGS, SearchResult, HistoryEntry } from "./types";
 import { RecallView, VIEW_TYPE_RECALL } from "./RecallView";
 import { RecallSettingTab } from "./RecallSettingTab";
 import { searchHighlights, searchDocuments } from "./readwiseCli";
@@ -8,6 +8,9 @@ export default class RecallPlugin extends Plugin {
 	settings: RecallSettings;
 	private generation = 0;
 	private currentFilePath: string | null = null;
+	private historyStack: HistoryEntry[] = [];
+	private currentResults: SearchResult[] = [];
+	private currentLabel?: string;
 
 	async onload(): Promise<void> {
 		await this.loadSettings();
@@ -113,6 +116,11 @@ export default class RecallPlugin extends Plugin {
 	}
 
 	private async triggerSearch(): Promise<void> {
+		// Note switch resets the history chain
+		this.historyStack = [];
+		this.currentResults = [];
+		this.currentLabel = undefined;
+
 		if (!this.isRecallViewVisible()) return;
 		const view = this.getView();
 		if (!view) return;
@@ -161,15 +169,50 @@ export default class RecallPlugin extends Plugin {
 			// Discard stale results
 			if (gen !== this.generation) return;
 
+			this.currentResults = results;
+			this.currentLabel = searchLabel;
+			const hasHistory = this.historyStack.length > 0;
+
 			if (results.length === 0) {
-				view.renderEmpty(searchLabel);
+				view.renderEmpty(searchLabel, hasHistory);
 			} else {
-				view.renderResults(results, searchLabel);
+				view.renderResults(results, searchLabel, hasHistory);
 			}
 		} catch (err: unknown) {
 			if (gen !== this.generation) return;
 			const message = err instanceof Error ? err.message : String(err);
 			view.renderError(message);
+		}
+	}
+
+	private goDeeper(highlightText: string): void {
+		// Push current results onto the history stack
+		this.historyStack.push({
+			results: this.currentResults,
+			searchLabel: this.currentLabel,
+		});
+
+		const truncated = highlightText.length > 60
+			? highlightText.slice(0, 57) + "..."
+			: highlightText;
+		this.executeSearch(highlightText, `Deeper: ${truncated}`);
+	}
+
+	private goBack(): void {
+		const entry = this.historyStack.pop();
+		if (!entry) return;
+
+		const view = this.getView();
+		if (!view) return;
+
+		this.currentResults = entry.results;
+		this.currentLabel = entry.searchLabel;
+		const hasHistory = this.historyStack.length > 0;
+
+		if (entry.results.length === 0) {
+			view.renderEmpty(entry.searchLabel, hasHistory);
+		} else {
+			view.renderResults(entry.results, entry.searchLabel, hasHistory);
 		}
 	}
 
@@ -229,6 +272,12 @@ export default class RecallPlugin extends Plugin {
 			const view = leaves[0].view as RecallView;
 			if (!view.onRefresh) {
 				view.onRefresh = () => this.triggerSearch();
+			}
+			if (!view.onGoDeeper) {
+				view.onGoDeeper = (text) => this.goDeeper(text);
+			}
+			if (!view.onBack) {
+				view.onBack = () => this.goBack();
 			}
 			return view;
 		}

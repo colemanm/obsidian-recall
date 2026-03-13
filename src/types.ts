@@ -59,3 +59,8 @@ export interface ReaderDocument {
 export type SearchResult =
 	| { type: "highlight"; data: ReadwiseHighlight }
 	| { type: "document"; data: ReaderDocument };
+
+export interface HistoryEntry {
+	results: SearchResult[];
+	searchLabel?: string;
+}
