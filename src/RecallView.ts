@@ -1,10 +1,11 @@
-import { ItemView, MarkdownView, WorkspaceLeaf } from "obsidian";
+import { ItemView, MarkdownView, Notice, WorkspaceLeaf } from "obsidian";
 import { SearchResult, ReadwiseHighlight, ReaderDocument } from "./types";
 
 export const VIEW_TYPE_RECALL = "recall-view";
 
 export class RecallView extends ItemView {
 	private contentEl_: HTMLElement;
+	private lastMarkdownLeaf: WorkspaceLeaf | null = null;
 	onRefresh: (() => void) | null = null;
 
 	constructor(leaf: WorkspaceLeaf) {
@@ -25,10 +26,23 @@ export class RecallView extends ItemView {
 	}
 
 	async onOpen(): Promise<void> {
+		this.registerEvent(
+			this.app.workspace.on("active-leaf-change", (leaf) => {
+				if (leaf && leaf.view instanceof MarkdownView) {
+					this.lastMarkdownLeaf = leaf;
+				}
+			}),
+		);
+		// Seed with whatever markdown leaf is currently active.
+		const active = this.app.workspace.getActiveViewOfType(MarkdownView);
+		if (active) {
+			this.lastMarkdownLeaf = active.leaf;
+		}
 		this.renderNoFile();
 	}
 
 	async onClose(): Promise<void> {
+		this.lastMarkdownLeaf = null;
 		this.contentEl_.empty();
 	}
 
@@ -177,13 +191,18 @@ if (searchLabel) {
 	}
 
 	private insertHighlight(h: ReadwiseHighlight): void {
-		// Can't use getActiveViewOfType — clicking Insert makes the sidebar
-		// the active leaf. Find the most recent markdown leaf instead.
-		const leaves = this.app.workspace.getLeavesOfType("markdown");
-		const mdLeaf = leaves.find((l) => l.view instanceof MarkdownView);
-		if (!mdLeaf) return;
+		const mdLeaf = this.lastMarkdownLeaf;
+		if (!mdLeaf || !(mdLeaf.view instanceof MarkdownView)) {
+			new Notice("Open a note first to insert a highlight.");
+			return;
+		}
 		const view = mdLeaf.view as MarkdownView;
 		const editor = view.editor;
+
+		// Re-focus the editor so replaceSelection has a valid cursor.
+		this.app.workspace.setActiveLeaf(mdLeaf, { focus: true });
+		editor.focus();
+
 		const source = h.title ? `[[${h.title}]]` : "Unknown source";
 		const author = h.author ? ` — [[${h.author}]]` : "";
 		const callout = `> [!quote] ${source}${author}\n> ${h.text}\n\n`;
