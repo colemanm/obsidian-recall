@@ -12,6 +12,18 @@ const COMMON_BIN_DIRS = [
 
 const COMMON_PATHS = COMMON_BIN_DIRS.map((d) => `${d}/readwise`);
 
+export function isCliInstalled(configured: string): Promise<boolean> {
+	const resolved = resolveCliPath(configured);
+	// If resolveCliPath found a concrete path (not the bare "readwise" fallback), it's installed.
+	if (resolved !== "readwise") return Promise.resolve(true);
+	// Last resort: try `which readwise` to check if it's on PATH at runtime.
+	return new Promise((resolve) => {
+		execFile("which", ["readwise"], { timeout: 3000 }, (error) => {
+			resolve(!error);
+		});
+	});
+}
+
 export function resolveCliPath(configured: string): string {
 	if (configured && configured !== "readwise") {
 		return configured;

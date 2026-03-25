@@ -1,12 +1,13 @@
-import { Menu, Plugin, TFile, WorkspaceLeaf } from "obsidian";
+import { Menu, Notice, Plugin, TFile, WorkspaceLeaf } from "obsidian";
 import { RecallSettings, DEFAULT_SETTINGS, SearchResult, HistoryEntry } from "./types";
 import { RecallView, VIEW_TYPE_RECALL } from "./RecallView";
 import { RecallSettingTab } from "./RecallSettingTab";
-import { searchHighlights, searchDocuments } from "./readwiseCli";
+import { searchHighlights, searchDocuments, isCliInstalled } from "./readwiseCli";
 
 export default class RecallPlugin extends Plugin {
 	settings: RecallSettings;
 	private generation = 0;
+	private cliAvailable = true;
 	private currentFilePath: string | null = null;
 	private historyStack: HistoryEntry[] = [];
 	private currentResults: SearchResult[] = [];
@@ -14,6 +15,11 @@ export default class RecallPlugin extends Plugin {
 
 	async onload(): Promise<void> {
 		await this.loadSettings();
+
+		this.cliAvailable = await isCliInstalled(this.settings.readwisePath);
+		if (!this.cliAvailable) {
+			new Notice("Recall: Readwise CLI not found. Open the Recall sidebar for setup instructions.");
+		}
 
 		this.registerView(VIEW_TYPE_RECALL, (leaf) => new RecallView(leaf));
 
@@ -125,6 +131,11 @@ export default class RecallPlugin extends Plugin {
 		const view = this.getView();
 		if (!view) return;
 
+		if (!this.cliAvailable) {
+			view.renderSetup();
+			return;
+		}
+
 		const file = this.app.workspace.getActiveFile();
 		if (!file || !(file instanceof TFile) || file.extension !== "md") {
 			view.renderNoFile();
@@ -181,7 +192,12 @@ export default class RecallPlugin extends Plugin {
 		} catch (err: unknown) {
 			if (gen !== this.generation) return;
 			const message = err instanceof Error ? err.message : String(err);
-			view.renderError(message);
+			if (message.includes("ENOENT") || message.includes("EACCES")) {
+				this.cliAvailable = false;
+				view.renderSetup();
+			} else {
+				view.renderError(message);
+			}
 		}
 	}
 
@@ -278,6 +294,22 @@ export default class RecallPlugin extends Plugin {
 			}
 			if (!view.onBack) {
 				view.onBack = () => this.goBack();
+			}
+			if (!view.onCheckCli) {
+				view.onCheckCli = async () => {
+					this.cliAvailable = await isCliInstalled(this.settings.readwisePath);
+					if (this.cliAvailable) {
+						this.triggerSearch();
+					} else {
+						new Notice("Readwise CLI still not found.");
+					}
+				};
+			}
+			if (!view.onOpenSettings) {
+				view.onOpenSettings = () => {
+					(this.app as any).setting.open();
+					(this.app as any).setting.openTabById(this.manifest.id);
+				};
 			}
 			return view;
 		}
