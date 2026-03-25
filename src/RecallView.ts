@@ -9,6 +9,8 @@ export class RecallView extends ItemView {
 	onRefresh: (() => void) | null = null;
 	onGoDeeper: ((highlightText: string) => void) | null = null;
 	onBack: (() => void) | null = null;
+	onCheckCli: (() => void) | null = null;
+	onOpenSettings: (() => void) | null = null;
 
 	constructor(leaf: WorkspaceLeaf) {
 		super(leaf);
@@ -46,6 +48,42 @@ export class RecallView extends ItemView {
 	async onClose(): Promise<void> {
 		this.lastMarkdownLeaf = null;
 		this.contentEl_.empty();
+	}
+
+	renderSetup(): void {
+		this.contentEl_.empty();
+		const el = this.contentEl_.createEl("div", { cls: "recall-setup" });
+
+		el.createEl("h3", { text: "Readwise CLI not found" });
+		el.createEl("p", {
+			text: "Recall requires the Readwise CLI to search your highlights and documents.",
+		});
+
+		el.createEl("p", { text: "To install, run:" });
+		const code = el.createEl("div", { cls: "recall-setup-code" });
+		code.createEl("code", { text: "npm install -g @readwise/cli" });
+		code.createEl("br");
+		code.createEl("code", { text: "readwise login" });
+
+		const linkP = el.createEl("p");
+		const link = linkP.createEl("a", { text: "Readwise CLI docs", cls: "recall-link" });
+		link.href = "https://readwise.io/cli";
+		link.addEventListener("click", (e) => {
+			e.preventDefault();
+			window.open("https://readwise.io/cli");
+		});
+
+		const actions = el.createEl("div", { cls: "recall-setup-actions" });
+
+		const checkBtn = actions.createEl("button", { cls: "mod-cta", text: "Check again" });
+		checkBtn.addEventListener("click", () => {
+			if (this.onCheckCli) this.onCheckCli();
+		});
+
+		const settingsBtn = actions.createEl("button", { text: "Open settings" });
+		settingsBtn.addEventListener("click", () => {
+			if (this.onOpenSettings) this.onOpenSettings();
+		});
 	}
 
 	renderNoFile(): void {

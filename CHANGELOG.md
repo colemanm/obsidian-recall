@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Onboarding experience when the Readwise CLI is not installed: shows a setup screen in the sidebar with install instructions and a notice on plugin load.
 - "Go Deeper" button on highlight cards: use a highlight's text as a new similarity search query to follow chains of related ideas through your Readwise library.
 - "Back" button in the toolbar to retrace your steps through the similarity chain without re-querying the API.
 - History stack that tracks previous search results; switching notes automatically resets the chain.

@@ -9,6 +9,42 @@
 	color: var(--text-error);
 }
 
+/* ── Setup / Onboarding ── */
+
+.recall-setup {
+	padding: 20px 16px;
+	font-size: var(--font-ui-small);
+	color: var(--text-normal);
+}
+
+.recall-setup h3 {
+	margin: 0 0 8px;
+}
+
+.recall-setup p {
+	margin: 6px 0;
+	color: var(--text-muted);
+}
+
+.recall-setup-code {
+	background: var(--background-secondary);
+	border: 1px solid var(--background-modifier-border);
+	border-radius: 6px;
+	padding: 10px 12px;
+	margin: 8px 0;
+	line-height: 1.8;
+}
+
+.recall-setup-code code {
+	font-size: var(--font-ui-smaller);
+}
+
+.recall-setup-actions {
+	display: flex;
+	gap: 8px;
+	margin-top: 14px;
+}
+
 /* ── Toolbar ── */
 
 .recall-toolbar {
