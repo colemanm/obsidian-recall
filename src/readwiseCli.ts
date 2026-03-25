@@ -1,4 +1,5 @@
 import { execFile } from "child_process";
+import { accessSync, constants } from "fs";
 import { ReadwiseHighlight, ReadwiseHighlightRaw, ReaderDocument } from "./types";
 
 const TIMEOUT_MS = 15_000;
@@ -30,16 +31,23 @@ export function resolveCliPath(configured: string): string {
 	}
 	// On macOS, Obsidian doesn't inherit shell PATH.
 	// Try common locations.
-	const fs = require("fs");
 	for (const p of COMMON_PATHS) {
 		try {
-			fs.accessSync(p, fs.constants.X_OK);
+			accessSync(p, constants.X_OK);
 			return p;
 		} catch {
 			// not found, continue
 		}
 	}
 	return configured || "readwise";
+}
+
+function parseCliJson(stdout: string): unknown {
+	try {
+		return JSON.parse(stdout);
+	} catch {
+		throw new Error("Readwise CLI returned invalid JSON. Check that the CLI is authenticated and working.");
+	}
 }
 
 function run(cliPath: string, args: string[]): Promise<string> {
@@ -78,10 +86,10 @@ export async function searchHighlights(
 		String(limit),
 		"--json",
 	]);
-	const parsed = JSON.parse(stdout);
+	const parsed = parseCliJson(stdout);
 	const raw: ReadwiseHighlightRaw[] = Array.isArray(parsed)
 		? parsed
-		: parsed.results ?? [];
+		: (parsed as any).results ?? [];
 	return raw.map((r) => ({
 		id: r.id,
 		text: r.attributes.highlight_plaintext,
@@ -109,12 +117,12 @@ export async function searchDocuments(
 		String(limit),
 		"--json",
 	]);
-	const parsed = JSON.parse(stdout);
+	const parsed = parseCliJson(stdout);
 	if (Array.isArray(parsed)) {
 		return parsed;
 	}
-	if (parsed.results && Array.isArray(parsed.results)) {
-		return parsed.results;
+	if (parsed && typeof parsed === "object" && Array.isArray((parsed as any).results)) {
+		return (parsed as any).results;
 	}
 	return [];
 }

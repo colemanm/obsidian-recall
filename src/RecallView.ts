@@ -1,6 +1,15 @@
 import { ItemView, MarkdownView, Notice, WorkspaceLeaf } from "obsidian";
 import { SearchResult, ReadwiseHighlight, ReaderDocument } from "./types";
 
+function isSafeUrl(url: string): boolean {
+	try {
+		const parsed = new URL(url);
+		return parsed.protocol === "https:" || parsed.protocol === "http:";
+	} catch {
+		return false;
+	}
+}
+
 export const VIEW_TYPE_RECALL = "recall-view";
 
 export class RecallView extends ItemView {
@@ -67,10 +76,11 @@ export class RecallView extends ItemView {
 
 		const linkP = el.createEl("p");
 		const link = linkP.createEl("a", { text: "Readwise CLI docs", cls: "recall-link" });
-		link.href = "https://readwise.io/cli";
+		const docsUrl = "https://readwise.io/cli";
+		link.href = docsUrl;
 		link.addEventListener("click", (e) => {
 			e.preventDefault();
-			window.open("https://readwise.io/cli");
+			window.open(docsUrl);
 		});
 
 		const actions = el.createEl("div", { cls: "recall-setup-actions" });
@@ -208,7 +218,7 @@ export class RecallView extends ItemView {
 			if (this.onGoDeeper) this.onGoDeeper(h.text);
 		});
 
-		if (h.url) {
+		if (h.url && isSafeUrl(h.url)) {
 			const link = actions.createEl("a", { cls: "recall-link", text: "Open in Readwise" });
 			link.href = h.url;
 			link.addEventListener("click", (e) => {
@@ -241,13 +251,13 @@ export class RecallView extends ItemView {
 
 		const actions = card.createEl("div", { cls: "recall-card-actions" });
 
-		if (d.source_url || d.url) {
+		const docUrl = d.source_url || d.url;
+		if (docUrl && isSafeUrl(docUrl)) {
 			const link = actions.createEl("a", { cls: "recall-link", text: "Open source" });
-			const url = d.source_url || d.url;
-			link.href = url;
+			link.href = docUrl;
 			link.addEventListener("click", (e) => {
 				e.preventDefault();
-				window.open(url);
+				window.open(docUrl);
 			});
 		}
 	}
@@ -265,9 +275,12 @@ export class RecallView extends ItemView {
 		this.app.workspace.setActiveLeaf(mdLeaf, { focus: true });
 		editor.focus();
 
-		const source = h.title ? `[[${h.title}]]` : "Unknown source";
-		const author = h.author ? ` — [[${h.author}]]` : "";
-		const callout = `> [!quote] ${source}${author}\n> ${h.text}\n\n`;
+		const escWiki = (s: string) => s.replace(/\[/g, "\\[").replace(/\]/g, "\\]");
+		const source = h.title ? `[[${escWiki(h.title)}]]` : "Unknown source";
+		const author = h.author ? ` — [[${escWiki(h.author)}]]` : "";
+		// Ensure newlines in highlight text don't break the blockquote
+		const text = h.text.replace(/\n/g, "\n> ");
+		const callout = `> [!quote] ${source}${author}\n> ${text}\n\n`;
 		editor.replaceSelection(callout);
 	}
 }
