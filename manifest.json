@@ -1,7 +1,7 @@
 {
 	"id": "obsidian-recall",
 	"name": "Recall",
-	"version": "1.2.0",
+	"version": "1.2.1",
 	"minAppVersion": "0.15.0",
 	"description": "Surface Readwise highlights semantically related to your current note.",
 	"author": "Coleman",

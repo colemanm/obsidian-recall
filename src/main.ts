@@ -4,6 +4,8 @@ import { RecallView, VIEW_TYPE_RECALL } from "./RecallView";
 import { RecallSettingTab } from "./RecallSettingTab";
 import { searchHighlights, searchDocuments, isCliInstalled } from "./readwiseCli";
 
+const MAX_HISTORY = 20;
+
 export default class RecallPlugin extends Plugin {
 	settings: RecallSettings;
 	private generation = 0;
@@ -12,6 +14,7 @@ export default class RecallPlugin extends Plugin {
 	private historyStack: HistoryEntry[] = [];
 	private currentResults: SearchResult[] = [];
 	private currentLabel?: string;
+	private debounceTimer: ReturnType<typeof setTimeout> | null = null;
 
 	async onload(): Promise<void> {
 		await this.loadSettings();
@@ -30,12 +33,6 @@ export default class RecallPlugin extends Plugin {
 		this.addCommand({
 			id: "open-recall-sidebar",
 			name: "Open Recall sidebar",
-			callback: () => this.activateView(),
-		});
-
-		this.addCommand({
-			id: "search-readwise-current-note",
-			name: "Search Readwise for current note",
 			callback: () => this.activateView(),
 		});
 
@@ -76,13 +73,14 @@ export default class RecallPlugin extends Plugin {
 				const path = file?.path ?? null;
 				if (path && path !== this.currentFilePath) {
 					this.currentFilePath = path;
-					this.triggerSearch();
+					this.debouncedTriggerSearch();
 				}
 			})
 		);
 	}
 
 	onunload(): void {
+		if (this.debounceTimer) clearTimeout(this.debounceTimer);
 		this.app.workspace.detachLeavesOfType(VIEW_TYPE_RECALL);
 	}
 
@@ -119,6 +117,14 @@ export default class RecallPlugin extends Plugin {
 		if (!skipSearch) {
 			this.triggerSearch();
 		}
+	}
+
+	private debouncedTriggerSearch(): void {
+		if (this.debounceTimer) clearTimeout(this.debounceTimer);
+		this.debounceTimer = setTimeout(() => {
+			this.debounceTimer = null;
+			this.triggerSearch();
+		}, this.settings.debounceDelayMs);
 	}
 
 	private async triggerSearch(): Promise<void> {
@@ -202,7 +208,10 @@ export default class RecallPlugin extends Plugin {
 	}
 
 	private goDeeper(highlightText: string): void {
-		// Push current results onto the history stack
+		// Push current results onto the history stack (capped to prevent unbounded growth)
+		if (this.historyStack.length >= MAX_HISTORY) {
+			this.historyStack.shift();
+		}
 		this.historyStack.push({
 			results: this.currentResults,
 			searchLabel: this.currentLabel,
@@ -307,8 +316,12 @@ export default class RecallPlugin extends Plugin {
 			}
 			if (!view.onOpenSettings) {
 				view.onOpenSettings = () => {
-					(this.app as any).setting.open();
-					(this.app as any).setting.openTabById(this.manifest.id);
+					try {
+						(this.app as any).setting.open();
+						(this.app as any).setting.openTabById(this.manifest.id);
+					} catch {
+						new Notice("Could not open settings. Open them manually from Settings → Recall.");
+					}
 				};
 			}
 			return view;

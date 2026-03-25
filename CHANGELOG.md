@@ -24,16 +24,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
-- None yet.
+- Removed duplicate "Search Readwise for current note" command (identical to "Open Recall sidebar").
 
 ### Fixed
 
+- Debounce delay setting now actually debounces note-switch searches (was previously ignored).
+- Highlight text with newlines no longer breaks the blockquote callout on insert.
+- Wikilink-like characters in highlight titles/authors are now escaped on insert.
+- CLI JSON parse errors now show a helpful message instead of a raw SyntaxError.
 - Avoid fetching highlights from Readwise when the Recall panel is hidden (e.g., another sidebar tab is active). Searches now only run when the panel is visible.
 - Fix "Insert" button on quote cards not inserting into the active editor. The button now tracks the last active markdown leaf and re-focuses the editor before inserting, and shows a notice if no note is open.
+- Cap "Go Deeper" history stack at 20 entries to prevent unbounded memory growth.
+- Private settings API access wrapped in try/catch for forward compatibility.
 
 ### Security
 
-- None yet.
+- Validate URLs from Readwise API before opening — only http/https schemes are allowed.
+- Replaced inline `require("fs")` with proper ES module import.
 
 ## [1.0.0] - 2026-03-11
 
