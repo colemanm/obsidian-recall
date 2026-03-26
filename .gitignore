@@ -1,6 +1,9 @@
 # npm
 node_modules
 
+# conductor
+.conductor
+
 # env
 .env
 .DS_Store

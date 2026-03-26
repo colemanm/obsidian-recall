@@ -17,7 +17,7 @@ Surface is an [Obsidian](https://obsidian.md) plugin that uses the [Readwise](ht
 
 - **Obsidian** 0.15.0 or newer (desktop).
 - **Readwise** account with highlights and/or Reader documents.
-- **Readwise CLI** installed and on your PATH (or a path set in plugin settings). The CLI must support:
+- **[Readwise CLI](https://readwise.io/cli)** installed and on your PATH (or a path set in plugin settings). The CLI must support:
   - `readwise-search-highlights --vector-search-term <term> --limit <n> --json`
   - `reader-search-documents --vector-search-term <query> --limit <n> --json`
 
