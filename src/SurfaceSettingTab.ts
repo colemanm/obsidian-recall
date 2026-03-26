@@ -1,10 +1,10 @@
 import { App, PluginSettingTab, Setting } from "obsidian";
-import type RecallPlugin from "./main";
+import type SurfacePlugin from "./main";
 
-export class RecallSettingTab extends PluginSettingTab {
-	plugin: RecallPlugin;
+export class SurfaceSettingTab extends PluginSettingTab {
+	plugin: SurfacePlugin;
 
-	constructor(app: App, plugin: RecallPlugin) {
+	constructor(app: App, plugin: SurfacePlugin) {
 		super(app, plugin);
 		this.plugin = plugin;
 	}

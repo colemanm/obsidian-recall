@@ -1,4 +1,4 @@
-export interface RecallSettings {
+export interface SurfaceSettings {
 	resultLimit: number;
 	searchMode: "highlights" | "documents" | "both";
 	debounceDelayMs: number;
@@ -6,7 +6,7 @@ export interface RecallSettings {
 	readwisePath: string;
 }
 
-export const DEFAULT_SETTINGS: RecallSettings = {
+export const DEFAULT_SETTINGS: SurfaceSettings = {
 	resultLimit: 10,
 	searchMode: "highlights",
 	debounceDelayMs: 1000,

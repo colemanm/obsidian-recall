@@ -16,7 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- None yet.
+- Renamed plugin from "Recall" to "Surface" (plugin ID, class names, CSS classes, commands, UI strings).
 
 ### Deprecated
 

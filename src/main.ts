@@ -1,13 +1,13 @@
 import { Menu, Notice, Plugin, TFile, WorkspaceLeaf } from "obsidian";
-import { RecallSettings, DEFAULT_SETTINGS, SearchResult, HistoryEntry } from "./types";
-import { RecallView, VIEW_TYPE_RECALL } from "./RecallView";
-import { RecallSettingTab } from "./RecallSettingTab";
+import { SurfaceSettings, DEFAULT_SETTINGS, SearchResult, HistoryEntry } from "./types";
+import { SurfaceView, VIEW_TYPE_SURFACE } from "./SurfaceView";
+import { SurfaceSettingTab } from "./SurfaceSettingTab";
 import { searchHighlights, searchDocuments, isCliInstalled } from "./readwiseCli";
 
 const MAX_HISTORY = 20;
 
-export default class RecallPlugin extends Plugin {
-	settings: RecallSettings;
+export default class SurfacePlugin extends Plugin {
+	settings: SurfaceSettings;
 	private generation = 0;
 	private cliAvailable = true;
 	private currentFilePath: string | null = null;
@@ -21,18 +21,18 @@ export default class RecallPlugin extends Plugin {
 
 		this.cliAvailable = await isCliInstalled(this.settings.readwisePath);
 		if (!this.cliAvailable) {
-			new Notice("Recall: Readwise CLI not found. Open the Recall sidebar for setup instructions.");
+			new Notice("Surface: Readwise CLI not found. Open the Surface sidebar for setup instructions.");
 		}
 
-		this.registerView(VIEW_TYPE_RECALL, (leaf) => new RecallView(leaf));
+		this.registerView(VIEW_TYPE_SURFACE, (leaf) => new SurfaceView(leaf));
 
-		this.addRibbonIcon("book-open", "Open Recall sidebar", () => {
+		this.addRibbonIcon("book-open", "Open Surface sidebar", () => {
 			this.activateView();
 		});
 
 		this.addCommand({
-			id: "open-recall-sidebar",
-			name: "Open Recall sidebar",
+			id: "open-surface-sidebar",
+			name: "Open Surface sidebar",
 			callback: () => this.activateView(),
 		});
 
@@ -48,7 +48,7 @@ export default class RecallPlugin extends Plugin {
 			},
 		});
 
-		this.addSettingTab(new RecallSettingTab(this.app, this));
+		this.addSettingTab(new SurfaceSettingTab(this.app, this));
 
 		this.registerEvent(
 			this.app.workspace.on("editor-menu", (menu: Menu, editor) => {
@@ -68,7 +68,7 @@ export default class RecallPlugin extends Plugin {
 
 		this.registerEvent(
 			this.app.workspace.on("active-leaf-change", () => {
-				if (!this.isRecallViewVisible()) return;
+				if (!this.isSurfaceViewVisible()) return;
 				const file = this.app.workspace.getActiveFile();
 				const path = file?.path ?? null;
 				if (path && path !== this.currentFilePath) {
@@ -81,7 +81,7 @@ export default class RecallPlugin extends Plugin {
 
 	onunload(): void {
 		if (this.debounceTimer) clearTimeout(this.debounceTimer);
-		this.app.workspace.detachLeavesOfType(VIEW_TYPE_RECALL);
+		this.app.workspace.detachLeavesOfType(VIEW_TYPE_SURFACE);
 	}
 
 	async loadSettings(): Promise<void> {
@@ -96,7 +96,7 @@ export default class RecallPlugin extends Plugin {
 		const { workspace } = this.app;
 
 		let leaf: WorkspaceLeaf | null = null;
-		const leaves = workspace.getLeavesOfType(VIEW_TYPE_RECALL);
+		const leaves = workspace.getLeavesOfType(VIEW_TYPE_SURFACE);
 
 		if (leaves.length > 0) {
 			leaf = leaves[0];
@@ -104,7 +104,7 @@ export default class RecallPlugin extends Plugin {
 			leaf = workspace.getRightLeaf(false);
 			if (leaf) {
 				await leaf.setViewState({
-					type: VIEW_TYPE_RECALL,
+					type: VIEW_TYPE_SURFACE,
 					active: true,
 				});
 			}
@@ -133,7 +133,7 @@ export default class RecallPlugin extends Plugin {
 		this.currentResults = [];
 		this.currentLabel = undefined;
 
-		if (!this.isRecallViewVisible()) return;
+		if (!this.isSurfaceViewVisible()) return;
 		const view = this.getView();
 		if (!view) return;
 
@@ -291,10 +291,10 @@ export default class RecallPlugin extends Plugin {
 		return parts.join(" ").trim();
 	}
 
-	private getView(): RecallView | null {
-		const leaves = this.app.workspace.getLeavesOfType(VIEW_TYPE_RECALL);
+	private getView(): SurfaceView | null {
+		const leaves = this.app.workspace.getLeavesOfType(VIEW_TYPE_SURFACE);
 		if (leaves.length > 0) {
-			const view = leaves[0].view as RecallView;
+			const view = leaves[0].view as SurfaceView;
 			if (!view.onRefresh) {
 				view.onRefresh = () => this.triggerSearch();
 			}
@@ -320,7 +320,7 @@ export default class RecallPlugin extends Plugin {
 						(this.app as any).setting.open();
 						(this.app as any).setting.openTabById(this.manifest.id);
 					} catch {
-						new Notice("Could not open settings. Open them manually from Settings → Recall.");
+						new Notice("Could not open settings. Open them manually from Settings → Surface.");
 					}
 				};
 			}
@@ -330,11 +330,11 @@ export default class RecallPlugin extends Plugin {
 	}
 
 	/**
-	 * Returns true if the Recall panel exists and is currently visible
+	 * Returns true if the Surface panel exists and is currently visible
 	 * (not deferred/hidden because the user switched to another tab).
 	 */
-	private isRecallViewVisible(): boolean {
-		const leaves = this.app.workspace.getLeavesOfType(VIEW_TYPE_RECALL);
+	private isSurfaceViewVisible(): boolean {
+		const leaves = this.app.workspace.getLeavesOfType(VIEW_TYPE_SURFACE);
 		if (leaves.length === 0) return false;
 		const leaf = leaves[0];
 		// isDeferred (Obsidian 1.7.2+): true when tab is in background

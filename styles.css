@@ -1,32 +1,32 @@
-.recall-status {
+.surface-status {
 	padding: 16px;
 	color: var(--text-muted);
 	font-size: var(--font-ui-small);
 	text-align: center;
 }
 
-.recall-error {
+.surface-error {
 	color: var(--text-error);
 }
 
 /* ── Setup / Onboarding ── */
 
-.recall-setup {
+.surface-setup {
 	padding: 20px 16px;
 	font-size: var(--font-ui-small);
 	color: var(--text-normal);
 }
 
-.recall-setup h3 {
+.surface-setup h3 {
 	margin: 0 0 8px;
 }
 
-.recall-setup p {
+.surface-setup p {
 	margin: 6px 0;
 	color: var(--text-muted);
 }
 
-.recall-setup-code {
+.surface-setup-code {
 	background: var(--background-secondary);
 	border: 1px solid var(--background-modifier-border);
 	border-radius: 6px;
@@ -35,11 +35,11 @@
 	line-height: 1.8;
 }
 
-.recall-setup-code code {
+.surface-setup-code code {
 	font-size: var(--font-ui-smaller);
 }
 
-.recall-setup-actions {
+.surface-setup-actions {
 	display: flex;
 	gap: 8px;
 	margin-top: 14px;
@@ -47,7 +47,7 @@
 
 /* ── Toolbar ── */
 
-.recall-toolbar {
+.surface-toolbar {
 	display: flex;
 	flex-direction: column;
 	gap: 4px;
@@ -55,23 +55,23 @@
 	border-bottom: 1px solid var(--background-modifier-border);
 }
 
-.recall-toolbar-row {
+.surface-toolbar-row {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
 }
 
-.recall-toolbar-buttons {
+.surface-toolbar-buttons {
 	display: flex;
 	gap: 6px;
 }
 
-.recall-count {
+.surface-count {
 	font-size: var(--font-ui-smaller);
 	color: var(--text-muted);
 }
 
-.recall-search-label {
+.surface-search-label {
 	font-size: var(--font-ui-smaller);
 	color: var(--text-muted);
 	line-height: 1.3;
@@ -84,7 +84,7 @@
 
 /* ── Results list ── */
 
-.recall-results {
+.surface-results {
 	padding: 10px 12px;
 	display: flex;
 	flex-direction: column;
@@ -93,30 +93,30 @@
 
 /* ── Card ── */
 
-.recall-card {
+.surface-card {
 	background: var(--background-secondary);
 	border: 1px solid var(--background-modifier-border);
 	border-radius: 8px;
 	padding: 14px;
 }
 
-.recall-card-header {
+.surface-card-header {
 	margin-bottom: 8px;
 	line-height: 1.4;
 }
 
-.recall-card-title {
+.surface-card-title {
 	font-weight: 600;
 	font-size: var(--font-ui-small);
 	color: var(--text-normal);
 }
 
-.recall-card-author {
+.surface-card-author {
 	font-size: var(--font-ui-smaller);
 	color: var(--text-muted);
 }
 
-.recall-card-text {
+.surface-card-text {
 	margin: 10px 0;
 	padding: 8px 12px;
 	border-left: 3px solid var(--interactive-accent);
@@ -125,28 +125,28 @@
 	line-height: 1.6;
 }
 
-.recall-card-note {
+.surface-card-note {
 	font-size: var(--font-ui-smaller);
 	color: var(--text-muted);
 	font-style: italic;
 	margin-bottom: 8px;
 }
 
-.recall-card-summary {
+.surface-card-summary {
 	font-size: var(--font-ui-small);
 	color: var(--text-normal);
 	line-height: 1.5;
 	margin: 8px 0;
 }
 
-.recall-card-tags {
+.surface-card-tags {
 	display: flex;
 	flex-wrap: wrap;
 	gap: 4px;
 	margin-bottom: 8px;
 }
 
-.recall-tag {
+.surface-tag {
 	font-size: var(--font-ui-smaller);
 	color: var(--text-accent);
 	background: var(--background-modifier-hover);
@@ -154,18 +154,18 @@
 	padding: 1px 6px;
 }
 
-.recall-card-meta {
+.surface-card-meta {
 	display: flex;
 	gap: 8px;
 	margin-bottom: 8px;
 }
 
-.recall-meta-item {
+.surface-meta-item {
 	font-size: var(--font-ui-smaller);
 	color: var(--text-muted);
 }
 
-.recall-card-actions {
+.surface-card-actions {
 	display: flex;
 	align-items: center;
 	gap: 8px;
@@ -174,7 +174,7 @@
 	border-top: 1px solid var(--background-modifier-border);
 }
 
-.recall-link {
+.surface-link {
 	font-size: var(--font-ui-smaller);
 	color: var(--text-accent);
 	cursor: pointer;

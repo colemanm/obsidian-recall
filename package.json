@@ -1,5 +1,5 @@
 {
-	"name": "obsidian-recall",
+	"name": "obsidian-surface",
 	"version": "1.2.1",
 	"description": "Surface Readwise highlights semantically related to your current note.",
 	"main": "main.js",

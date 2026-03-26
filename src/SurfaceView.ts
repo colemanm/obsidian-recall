@@ -10,9 +10,9 @@ function isSafeUrl(url: string): boolean {
 	}
 }
 
-export const VIEW_TYPE_RECALL = "recall-view";
+export const VIEW_TYPE_SURFACE = "surface-view";
 
-export class RecallView extends ItemView {
+export class SurfaceView extends ItemView {
 	private contentEl_: HTMLElement;
 	private lastMarkdownLeaf: WorkspaceLeaf | null = null;
 	onRefresh: (() => void) | null = null;
@@ -27,11 +27,11 @@ export class RecallView extends ItemView {
 	}
 
 	getViewType(): string {
-		return VIEW_TYPE_RECALL;
+		return VIEW_TYPE_SURFACE;
 	}
 
 	getDisplayText(): string {
-		return "Recall";
+		return "Surface";
 	}
 
 	getIcon(): string {
@@ -61,21 +61,21 @@ export class RecallView extends ItemView {
 
 	renderSetup(): void {
 		this.contentEl_.empty();
-		const el = this.contentEl_.createEl("div", { cls: "recall-setup" });
+		const el = this.contentEl_.createEl("div", { cls: "surface-setup" });
 
 		el.createEl("h3", { text: "Readwise CLI not found" });
 		el.createEl("p", {
-			text: "Recall requires the Readwise CLI to search your highlights and documents.",
+			text: "Surface requires the Readwise CLI to search your highlights and documents.",
 		});
 
 		el.createEl("p", { text: "To install, run:" });
-		const code = el.createEl("div", { cls: "recall-setup-code" });
+		const code = el.createEl("div", { cls: "surface-setup-code" });
 		code.createEl("code", { text: "npm install -g @readwise/cli" });
 		code.createEl("br");
 		code.createEl("code", { text: "readwise login" });
 
 		const linkP = el.createEl("p");
-		const link = linkP.createEl("a", { text: "Readwise CLI docs", cls: "recall-link" });
+		const link = linkP.createEl("a", { text: "Readwise CLI docs", cls: "surface-link" });
 		const docsUrl = "https://readwise.io/cli";
 		link.href = docsUrl;
 		link.addEventListener("click", (e) => {
@@ -83,7 +83,7 @@ export class RecallView extends ItemView {
 			window.open(docsUrl);
 		});
 
-		const actions = el.createEl("div", { cls: "recall-setup-actions" });
+		const actions = el.createEl("div", { cls: "surface-setup-actions" });
 
 		const checkBtn = actions.createEl("button", { cls: "mod-cta", text: "Check again" });
 		checkBtn.addEventListener("click", () => {
@@ -99,7 +99,7 @@ export class RecallView extends ItemView {
 	renderNoFile(): void {
 		this.contentEl_.empty();
 		this.contentEl_.createEl("div", {
-			cls: "recall-status",
+			cls: "surface-status",
 			text: "Open a note to see related highlights.",
 		});
 	}
@@ -107,14 +107,14 @@ export class RecallView extends ItemView {
 	renderLoading(): void {
 		this.contentEl_.empty();
 		this.contentEl_.createEl("div", {
-			cls: "recall-status",
+			cls: "surface-status",
 			text: "Searching...",
 		});
 	}
 
 	renderError(message: string): void {
 		this.contentEl_.empty();
-		const el = this.contentEl_.createEl("div", { cls: "recall-status recall-error" });
+		const el = this.contentEl_.createEl("div", { cls: "surface-status surface-error" });
 		el.createEl("strong", { text: "Error" });
 		el.createEl("p", { text: message });
 	}
@@ -123,7 +123,7 @@ export class RecallView extends ItemView {
 		this.contentEl_.empty();
 		this.addToolbar(0, searchLabel, hasHistory);
 		this.contentEl_.createEl("div", {
-			cls: "recall-status",
+			cls: "surface-status",
 			text: "No related highlights found.",
 		});
 	}
@@ -132,7 +132,7 @@ export class RecallView extends ItemView {
 		this.contentEl_.empty();
 		this.addToolbar(results.length, searchLabel, hasHistory);
 
-		const container = this.contentEl_.createEl("div", { cls: "recall-results" });
+		const container = this.contentEl_.createEl("div", { cls: "surface-results" });
 
 		for (const result of results) {
 			if (result.type === "highlight") {
@@ -144,11 +144,11 @@ export class RecallView extends ItemView {
 	}
 
 	private addToolbar(count: number, searchLabel?: string, hasHistory?: boolean): void {
-		const wrapper = this.contentEl_.createEl("div", { cls: "recall-toolbar" });
+		const wrapper = this.contentEl_.createEl("div", { cls: "surface-toolbar" });
 
-		const row = wrapper.createEl("div", { cls: "recall-toolbar-row" });
+		const row = wrapper.createEl("div", { cls: "surface-toolbar-row" });
 
-		const buttons = row.createEl("div", { cls: "recall-toolbar-buttons" });
+		const buttons = row.createEl("div", { cls: "surface-toolbar-buttons" });
 
 		if (hasHistory) {
 			const backBtn = buttons.createEl("button", {
@@ -167,41 +167,41 @@ export class RecallView extends ItemView {
 		});
 
 		row.createEl("span", {
-			cls: "recall-count",
+			cls: "surface-count",
 			text: `${count} result${count !== 1 ? "s" : ""}`,
 		});
 
 		if (searchLabel) {
 			wrapper.createEl("div", {
-				cls: "recall-search-label",
+				cls: "surface-search-label",
 				text: searchLabel,
 			});
 		}
 	}
 
 	private renderHighlightCard(container: HTMLElement, h: ReadwiseHighlight): void {
-		const card = container.createEl("div", { cls: "recall-card" });
+		const card = container.createEl("div", { cls: "surface-card" });
 
-		const header = card.createEl("div", { cls: "recall-card-header" });
-		header.createEl("span", { cls: "recall-card-title", text: h.title || "Unknown source" });
+		const header = card.createEl("div", { cls: "surface-card-header" });
+		header.createEl("span", { cls: "surface-card-title", text: h.title || "Unknown source" });
 		if (h.author) {
-			header.createEl("span", { cls: "recall-card-author", text: ` — ${h.author}` });
+			header.createEl("span", { cls: "surface-card-author", text: ` — ${h.author}` });
 		}
 
-		card.createEl("blockquote", { cls: "recall-card-text", text: h.text });
+		card.createEl("blockquote", { cls: "surface-card-text", text: h.text });
 
 		if (h.note) {
-			card.createEl("div", { cls: "recall-card-note", text: h.note });
+			card.createEl("div", { cls: "surface-card-note", text: h.note });
 		}
 
 		if (h.tags && h.tags.length > 0) {
-			const tagsEl = card.createEl("div", { cls: "recall-card-tags" });
+			const tagsEl = card.createEl("div", { cls: "surface-card-tags" });
 			for (const tag of h.tags) {
-				tagsEl.createEl("span", { cls: "recall-tag", text: `#${tag}` });
+				tagsEl.createEl("span", { cls: "surface-tag", text: `#${tag}` });
 			}
 		}
 
-		const actions = card.createEl("div", { cls: "recall-card-actions" });
+		const actions = card.createEl("div", { cls: "surface-card-actions" });
 
 		const insertBtn = actions.createEl("button", {
 			cls: "mod-cta",
@@ -219,7 +219,7 @@ export class RecallView extends ItemView {
 		});
 
 		if (h.url && isSafeUrl(h.url)) {
-			const link = actions.createEl("a", { cls: "recall-link", text: "Open in Readwise" });
+			const link = actions.createEl("a", { cls: "surface-link", text: "Open in Readwise" });
 			link.href = h.url;
 			link.addEventListener("click", (e) => {
 				e.preventDefault();
@@ -229,31 +229,31 @@ export class RecallView extends ItemView {
 	}
 
 	private renderDocumentCard(container: HTMLElement, d: ReaderDocument): void {
-		const card = container.createEl("div", { cls: "recall-card recall-card-document" });
+		const card = container.createEl("div", { cls: "surface-card surface-card-document" });
 
-		const header = card.createEl("div", { cls: "recall-card-header" });
-		header.createEl("span", { cls: "recall-card-title", text: d.title || "Untitled" });
+		const header = card.createEl("div", { cls: "surface-card-header" });
+		header.createEl("span", { cls: "surface-card-title", text: d.title || "Untitled" });
 		if (d.author) {
-			header.createEl("span", { cls: "recall-card-author", text: ` — ${d.author}` });
+			header.createEl("span", { cls: "surface-card-author", text: ` — ${d.author}` });
 		}
 
 		if (d.summary) {
-			card.createEl("p", { cls: "recall-card-summary", text: d.summary });
+			card.createEl("p", { cls: "surface-card-summary", text: d.summary });
 		}
 
-		const meta = card.createEl("div", { cls: "recall-card-meta" });
+		const meta = card.createEl("div", { cls: "surface-card-meta" });
 		if (d.category) {
-			meta.createEl("span", { cls: "recall-meta-item", text: d.category });
+			meta.createEl("span", { cls: "surface-meta-item", text: d.category });
 		}
 		if (d.site_name) {
-			meta.createEl("span", { cls: "recall-meta-item", text: d.site_name });
+			meta.createEl("span", { cls: "surface-meta-item", text: d.site_name });
 		}
 
-		const actions = card.createEl("div", { cls: "recall-card-actions" });
+		const actions = card.createEl("div", { cls: "surface-card-actions" });
 
 		const docUrl = d.source_url || d.url;
 		if (docUrl && isSafeUrl(docUrl)) {
-			const link = actions.createEl("a", { cls: "recall-link", text: "Open source" });
+			const link = actions.createEl("a", { cls: "surface-link", text: "Open source" });
 			link.href = docUrl;
 			link.addEventListener("click", (e) => {
 				e.preventDefault();
