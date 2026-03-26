@@ -10,6 +10,7 @@ Surface is an [Obsidian](https://obsidian.md) plugin that uses the [Readwise](ht
 - **Automatic search** — Switching to a different note triggers a new search (with configurable debounce).
 - **Search by selection** — Select text in the editor and run "Search Readwise for selection" to find related content for just that snippet.
 - **Insert as callout** — From any highlight card, click **Insert** to paste it into the active note as a `> [!quote]` callout with title, author, and text.
+- **Go Deeper** — Click **Go Deeper** on any highlight to use its text as a new search query, following chains of similar ideas through your library. Use the **Back** button to retrace your steps.
 - **Search mode** — Choose to search highlights only, documents only, or both.
 
 ## Requirements
