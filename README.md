@@ -38,13 +38,12 @@ On macOS, if the CLI is installed via Homebrew (e.g. under `/opt/homebrew/bin` o
 ## Usage
 
 - **Open the sidebar** — Click the book icon in the left ribbon, or run the command **Open Surface sidebar**. The pane opens on the right and runs a search for the current note.
-- **Search for current note** — Command: **Search Readwise for current note**. Uses the active note's content to run a semantic search (no need to have the Surface pane open first).
 - **Search for selection** — Select text, then either run **Search Readwise for selection** from the command palette or use the editor context menu: **Search Readwise for selection**. Opens the Surface pane and searches using only the selected text.
 - **Refresh** — In the Surface pane, use the **Refresh** button to run the search again with the same context.
 
 ### How the "current note" search term is built
 
-When you switch notes or run "Search Readwise for current note", Surface builds a search string from:
+When you switch notes, Surface builds a search string from:
 
 1. Note title (file name)
 2. Frontmatter: `tags`, `topics`, `categories`, `keywords`, `subject`
@@ -66,7 +65,7 @@ That string is sent to the Readwise CLI as the vector search term.
 ## Building from source
 
 ```bash
-git clone https://github.com/your-username/obsidian-surface.git
+git clone https://github.com/colemanm/obsidian-surface.git
 cd obsidian-surface
 npm install
 npm run build

@@ -1,7 +1,0 @@
-{
-  "resultLimit": 10,
-  "searchMode": "highlights",
-  "debounceDelayMs": 1000,
-  "searchContentLength": 700,
-  "readwisePath": "readwise"
-}

@@ -9,6 +9,32 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- None yet.
+
+### Changed
+
+- None yet.
+
+### Deprecated
+
+- None yet.
+
+### Removed
+
+- None yet.
+
+### Fixed
+
+- None yet.
+
+### Security
+
+- None yet.
+
+## [1.3.0] - 2026-03-25
+
+### Added
+
 - Onboarding experience when the Readwise CLI is not installed: shows a setup screen in the sidebar with install instructions and a notice on plugin load.
 - "Go Deeper" button on highlight cards: use a highlight's text as a new similarity search query to follow chains of related ideas through your Readwise library.
 - "Back" button in the toolbar to retrace your steps through the similarity chain without re-querying the API.
@@ -17,10 +43,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Renamed plugin from "Recall" to "Surface" (plugin ID, class names, CSS classes, commands, UI strings).
-
-### Deprecated
-
-- None yet.
 
 ### Removed
 
@@ -32,7 +54,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Highlight text with newlines no longer breaks the blockquote callout on insert.
 - Wikilink-like characters in highlight titles/authors are now escaped on insert.
 - CLI JSON parse errors now show a helpful message instead of a raw SyntaxError.
-- Avoid fetching highlights from Readwise when the Recall panel is hidden (e.g., another sidebar tab is active). Searches now only run when the panel is visible.
+- Avoid fetching highlights from Readwise when the Surface panel is hidden (e.g., another sidebar tab is active). Searches now only run when the panel is visible.
 - Fix "Insert" button on quote cards not inserting into the active editor. The button now tracks the last active markdown leaf and re-focuses the editor before inserting, and shows a notice if no note is open.
 - Cap "Go Deeper" history stack at 20 entries to prevent unbounded memory growth.
 - Private settings API access wrapped in try/catch for forward compatibility.

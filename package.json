@@ -13,7 +13,7 @@
 		"version:major": "npm version major"
 	},
 	"keywords": [],
-	"author": "",
+	"author": "Coleman",
 	"license": "MIT",
 	"devDependencies": {
 		"@types/node": "^16.11.6",
