@@ -25,10 +25,13 @@ On macOS, if the CLI is installed via Homebrew (e.g. under `/opt/homebrew/bin` o
 
 ## Installation
 
+### Install via BRAT
+
 1. Install the Readwise CLI and ensure it's working (vector search and JSON output).
-2. In Obsidian, go to **Settings → Community plugins**, disable **Restricted mode** if needed, and click **Browse**.
-3. Search for **Surface**, install it, then enable it.
-4. Open **Settings → Surface** and set the **Readwise CLI path** if it's not `readwise` on your PATH.
+2. In Obsidian, install and enable the [BRAT](https://github.com/TfTHacker/obsidian42-brat) plugin.
+3. In BRAT, choose **Add Beta plugin** and enter `colemanm/obsidian-surface`.
+4. Let BRAT install the latest release, then enable **Surface** under **Settings → Community plugins**.
+5. Open **Settings → Surface** and set the **Readwise CLI path** if it's not `readwise` on your PATH.
 
 ### Manual install
 
@@ -73,6 +76,13 @@ npm run build
 ```
 
 Then copy `main.js`, `manifest.json`, and `styles.css` (if present) from the project root into your vault's `.obsidian/plugins/obsidian-surface/` folder.
+
+## Maintainer release flow
+
+1. Add user-facing notes under `## [Unreleased]` in `CHANGELOG.md`.
+2. Run `npm run version:patch`, `npm run version:minor`, or `npm run version:major`.
+3. Push the resulting version commit and plain semver tag.
+4. GitHub Actions builds the plugin and publishes a GitHub Release with `main.js`, `manifest.json`, and `styles.css` for BRAT.
 
 ## License
 

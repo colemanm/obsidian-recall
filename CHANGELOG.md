@@ -9,11 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- None yet.
+- BRAT-compatible GitHub Releases are now published with root-level `main.js`, `manifest.json`, and `styles.css` assets for beta installs.
 
 ### Changed
 
-- None yet.
+- Maintainer version scripts now promote changelog notes into dated release sections and create plain semver tags that match `manifest.json`.
 
 ### Deprecated
 
