@@ -11,17 +11,27 @@ Surface is an [Obsidian](https://obsidian.md) plugin that uses the [Readwise](ht
 - **Search by selection** — Select text in the editor and run "Search Readwise for selection" to find related content for just that snippet.
 - **Insert as callout** — From any highlight card, click **Insert** to paste it into the active note as a `> [!quote]` callout with title, author, and text.
 - **Go Deeper** — Click **Go Deeper** on any highlight to use its text as a new search query, following chains of similar ideas through your library. Use the **Back** button to retrace your steps.
-- **Search mode** — Choose to search highlights only, documents only, or both.
+- **Search mode** — Choose to search highlights only, documents only, or both. Document results show title, author, summary, category, and site name.
+- **Jump to source** — Highlight cards link "Open in Readwise"; document cards link "Open source" to jump to the original article.
+- **First-run setup help** — If the Readwise CLI isn't detected, the sidebar shows install instructions with **Check again** and **Open settings** buttons.
 
 ## Requirements
 
 - **Obsidian** 0.15.0 or newer (desktop).
 - **Readwise** account with highlights and/or Reader documents.
-- **[Readwise CLI](https://readwise.io/cli)** installed and on your PATH (or a path set in plugin settings). The CLI must support:
+- **[Readwise CLI](https://readwise.io/cli)** installed and on your PATH (or a path set in plugin settings). Install and authenticate:
+
+  ```bash
+  npm install -g @readwise/cli
+  readwise login
+  ```
+
+  The CLI must support:
+
   - `readwise-search-highlights --vector-search-term <term> --limit <n> --json`
   - `reader-search-documents --vector-search-term <query> --limit <n> --json`
 
-On macOS, if the CLI is installed via Homebrew (e.g. under `/opt/homebrew/bin` or `/usr/local/bin`), Surface will try those locations when the path is left as `readwise`.
+On macOS, if the CLI is installed via Homebrew (e.g. under `/opt/homebrew/bin` or `/usr/local/bin`), Surface will try those locations when the path is left as `readwise`. If the CLI isn't detected on plugin load, the Surface sidebar will show these same install steps with a **Check again** button.
 
 ## Installation
 

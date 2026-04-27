@@ -3,7 +3,7 @@
 	"name": "Surface",
 	"version": "1.3.0",
 	"minAppVersion": "0.15.0",
-	"description": "Surface Readwise highlights semantically related to your current note.",
+	"description": "Surface Readwise highlights and documents semantically related to your current note.",
 	"author": "Coleman",
 	"authorUrl": "https://github.com/colemanm",
 	"isDesktopOnly": true

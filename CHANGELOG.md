@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Maintainer version scripts now promote changelog notes into dated release sections and create plain semver tags that match `manifest.json`.
+- Plugin description in `manifest.json` and `package.json` now mentions documents alongside highlights, matching what the plugin actually surfaces.
 
 ### Deprecated
 

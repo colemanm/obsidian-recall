@@ -1,7 +1,7 @@
 {
 	"name": "obsidian-surface",
 	"version": "1.3.0",
-	"description": "Surface Readwise highlights semantically related to your current note.",
+	"description": "Surface Readwise highlights and documents semantically related to your current note.",
 	"main": "main.js",
 	"scripts": {
 		"dev": "node esbuild.config.mjs",
