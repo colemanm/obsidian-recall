@@ -9,6 +9,32 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- None yet.
+
+### Changed
+
+- None yet.
+
+### Deprecated
+
+- None yet.
+
+### Removed
+
+- None yet.
+
+### Fixed
+
+- None yet.
+
+### Security
+
+- None yet.
+
+## [1.3.1] - 2026-04-27
+
+### Added
+
 - BRAT-compatible GitHub Releases are now published with root-level `main.js`, `manifest.json`, and `styles.css` assets for beta installs.
 
 ### Changed
